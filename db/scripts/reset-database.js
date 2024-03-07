@@ -11,48 +11,57 @@ async function resetDatabase() {
   try {
     // Drop existing tables if they exist
     await pool.query(`
-        DROP TABLE IF EXISTS wines CASCADE;
-        DROP TABLE IF EXISTS cheeses CASCADE;
+        DROP TABLE IF EXISTS bands CASCADE;
+        DROP TABLE IF EXISTS venues CASCADE;
     `);
 
-    // Create the artists table
+    // Create the bands table
     await pool.query(`
-        CREATE TABLE wines (
+        CREATE TABLE bands (
             id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             country VARCHAR(255),
-            type VARCHAR(255),
-            year INT,
-            cheese_id INT
+            genre VARCHAR(255)
         );
     `);
 
-    // Create the albums table with a foreign key to the artists table
+    // Create the venues table with a foreign key to the bands table
     await pool.query(`
-        CREATE TABLE albums (
+        CREATE TABLE venues (
             id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-            title VARCHAR(255) NOT NULL,
-            published_date DATE,
-            artist_id INT REFERENCES artists(id)
+            name VARCHAR(255) NOT NULL,
+            capacity INT,
+            city VARCHAR(255),
+            bands_id INT REFERENCES bands(id)
         );
     `);
+
+    // Create the dates table with foreign key to the bands table and venue table
+//     await pool.query(`
+//     CREATE TABLE venues (
+//         id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+//         date DATE NOT NULL,
+//         bands_id INT REFERENCES bands(id),
+//         venue_id INT REFERENCES venues(id)
+//     );
+// `);
 
     // Seed the artists table
     await pool.query(`
-        INSERT INTO artists (name)
+        INSERT INTO bands (name, country, genre)
         VALUES 
-            ('Dua Lipa'),
-            ('Jay-Z');
+            ('Arctic Mokeys', 'UK', 'Brit Rock'),
+            ('Architects', 'US', 'Heavy Metal'),
+            ('M83', 'France', 'Electronic');
     `);
 
-    // Seed the albums table
+    // Seed the venues table
     await pool.query(`
-        INSERT INTO albums (title, published_date, artist_id)
+        INSERT INTO venues (name, capacity, city, bands_id)
         VALUES 
-            ('Dua Lipa', '2017-06-02', 1),
-            ('Future Nostalgia', '2020-03-27', 1),
-            ('Reasonable Doubt', '1996-06-25', 2),
-            ('The Blueprint', '2001-09-11', 2);
+            ('O2 Academy Brixton', 2000, 'London', 2),
+            ('Kia Forum', 17500, 'Los Angeles', 1),
+            ('Terminal 5', 3000, 'New York', 3);
     `);
 
     console.log("Database reset successful");
