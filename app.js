@@ -44,6 +44,14 @@ app.get("/bands/", async function (req, res) {
 
 // Endpoint to retrieve a <resource_one> by id
 app.get("/bands/:id", async function (req, res) {
+  const id = req.params.id;
+  const band = await getBandsById(id);
+  if (!band) {
+    res.status(404).json({status: "fail", msg: "Not found" });
+  } else {
+    res.status(200).json({status: "success", data: band});
+  }
+
 });
 
 // Endpoint to create a new <resource_one>
