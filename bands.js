@@ -5,7 +5,7 @@ import { pool } from "./db/index.js";
 export async function getBands() {
   // Query the database and return all resource ones
   // Define SQL query to fetch all data from bands table
-  const queryText = "SELECT * FROM bands";
+  const queryText = `SELECT * FROM bands`;
   // Use pool object to send query to db
   const result = await pool.query(queryText);
   // rows property of the result object contains the retrieved data
@@ -14,7 +14,7 @@ export async function getBands() {
 
 export async function getBandsById(id) {
   // Query the database and return the resource with a matching id or null
-  const queryText = "SELECT * FROM bands WHERE id=$1";
+  const queryText = `SELECT * FROM bands WHERE id=$1`;
   const result = await pool.query(queryText, [id]);
   return result.rows[0] || null;
 }
@@ -35,4 +35,7 @@ export async function updateBandsById(id, updates) {
 
 export async function deleteBandsById(id) {
   // Query the database to delete the resource and return the deleted resource or null
+  const queryText = `DELETE FROM bands WHERE id=$1 RETURNING *`;
+  const result = await pool.query(queryText, [id]);
+  return result.rows[0] || null; 
 }

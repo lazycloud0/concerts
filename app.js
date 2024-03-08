@@ -66,11 +66,22 @@ app.put("/bands/:id", async function (req, res) {
   const id = req.params.id;
   const data = req.body;
   const band = await updateBandsById(id, data);
-  res.status(201).json({status: "success", data: band});
+  if (!band) {
+    res.status(404).json({status: "fail", msg: "Not found" });
+  } else {
+  res.status(200).json({status: "success", data: band});
+  }
 });
 
 // Endpoint to delete a specific <resource_one> by id
 app.delete("/bands/:id", async function (req, res) {
+  const id = req.params.id;
+  const band = await deleteBandsById(id);
+  if (!band) {
+    res.status(404).json({status: "fail", msg: "Not found" });
+  } else {
+    res.status(200).json({status: "success", data: band});
+  }
 });
 
 
