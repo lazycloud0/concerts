@@ -62,7 +62,11 @@ app.post("/bands/", async function (req, res) {
 });
 
 // Endpoint to update a specific <resource_one> by id
-app.patch("/bands/:id", async function (req, res) {
+app.put("/bands/:id", async function (req, res) {
+  const id = req.params.id;
+  const data = req.body;
+  const band = await updateBandsById(id, data);
+  res.status(201).json({status: "success", data: band});
 });
 
 // Endpoint to delete a specific <resource_one> by id

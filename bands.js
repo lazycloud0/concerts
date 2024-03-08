@@ -28,6 +28,9 @@ export async function createBand(band) {
 
 export async function updateBandsById(id, updates) {
   // Query the database to update the resource and return the newly updated resource or null
+  const queryText = `UPDATE bands SET name=$1, country=$2, genre=$3 WHERE id=$4 RETURNING *`;
+  const result = await pool.query(queryText, [updates.name, updates.country, updates.genre, id]);
+  return result.rows[0] || null;
 }
 
 export async function deleteBandsById(id) {
