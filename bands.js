@@ -19,8 +19,11 @@ export async function getBandsById(id) {
   return result.rows[0] || null;
 }
 
-export async function createBands(resource) {
+export async function createBand(band) {
   // Query the database to create an resource and return the newly created resource
+  const queryText = `INSERT INTO bands (name, country, genre) VALUES ($1, $2, $3) RETURNING *`;
+  const result = await pool.query(queryText, [band.name, band.country, band.genre]);
+  return result.rows[0] || null;
 }
 
 export async function updateBandsById(id, updates) {

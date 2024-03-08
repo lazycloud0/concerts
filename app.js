@@ -7,7 +7,7 @@ import express from "express";
 import {
   getBands,
   getBandsById,
-  createBands,
+  createBand,
   updateBandsById,
   deleteBandsById,
 } from "./bands.js";
@@ -56,6 +56,9 @@ app.get("/bands/:id", async function (req, res) {
 
 // Endpoint to create a new <resource_one>
 app.post("/bands/", async function (req, res) {
+  const data = req.body;
+  const band = await createBand(data);
+  res.status(201).json({status: "success", data: band});
 });
 
 // Endpoint to update a specific <resource_one> by id
